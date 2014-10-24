@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.flex.compiler.falcon.tests</groupId>
-    <artifactId>test-swf-not-runnable</artifactId>
+    <artifactId>air-test-swf-not-runnable</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>swc</packaging>
 
