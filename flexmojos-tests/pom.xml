@@ -73,6 +73,11 @@
         -->
         <module>optimize-swf</module>
         <module>optimize-swc</module>
+
+        <!--
+            Problem area: When annotating an Interface with Bindable, this causes problems.
+        -->
+        <module>bindable-interface</module>
     </modules>
 
 </project>
