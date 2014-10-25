@@ -78,6 +78,11 @@
             Problem area: When annotating an Interface with Bindable, this causes problems.
         -->
         <module>bindable-interface</module>
+
+        <!--
+            Problem area: When including an mx:Repeater, Falcon produces operand stack underflow exceptions.
+        -->
+        <module>mx-repeater</module>
     </modules>
 
 </project>
