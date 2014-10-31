@@ -17,39 +17,14 @@
  *
  */
 
-package org.apache.flex.compiler.asdoc.flexjs;
+package org.apache.flex.compiler.codegen.js.vf2js;
 
-import org.apache.flex.compiler.asdoc.IASDocComment;
+import org.apache.flex.compiler.codegen.js.goog.IJSGoogEmitter;
 
-import antlr.Token;
-
-public class ASDocComment implements IASDocComment
+/**
+ * @author Erik de Bruin
+ */
+public interface IJSVF2JSEmitter extends IJSGoogEmitter
 {
 
-    public ASDocComment(Token t)
-    {
-        token = t;
-    }
-    
-    Token token;
-    
-    public String commentNoEnd()
-    {
-        String s = token.getText();
-        String[] lines = s.split("\n");
-        StringBuilder sb = new StringBuilder();
-        sb.append(lines[0]);
-        sb.append("\n");
-        int n = lines.length;
-        for (int i = 1; i < n - 1; i++)
-        {
-            String line = lines[i];
-            int star = line.indexOf("*");
-            sb.append(" ");
-            if (star > -1)
-                sb.append(line.substring(star));
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
 }

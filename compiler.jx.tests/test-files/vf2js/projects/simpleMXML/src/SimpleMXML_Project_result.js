@@ -12,17 +12,18 @@
  * limitations under the License.
  */
 /**
- * SimpleMXML
+ * SimpleMXML_Project
  *
  * @fileoverview
  *
  * @suppress {checkTypes}
  */
 
-goog.provide('SimpleMXML');
+goog.provide('SimpleMXML_Project');
 
 goog.require('spark.components.Application');
-goog.require('spark.components.Button');
+goog.require('example.Component');
+goog.require('org.apache.flex.utils.Language');
 
 
 
@@ -31,22 +32,10 @@ goog.require('spark.components.Button');
  * @constructor
  * @extends {spark.components.Application}
  */
-SimpleMXML = function() {
-  SimpleMXML.base(this, 'constructor');
-  
-  /**
-   * @private
-   * @type {spark.components.Button}
-   */
-  this.$ID0;
-
-  /**
-   * @private
-   * @type {spark.components.Button}
-   */
-  this.$ID1;
-};
-goog.inherits(SimpleMXML, spark.components.Application);
+SimpleMXML_Project = function() {
+  SimpleMXML_Project.base(this, 'constructor');
+  };
+goog.inherits(SimpleMXML_Project, spark.components.Application);
 
 
 /**
@@ -54,7 +43,14 @@ goog.inherits(SimpleMXML, spark.components.Application);
  *
  * @type {Object.<string, Array.<Object>>}
  */
-SimpleMXML.prototype.FLEXJS_CLASS_INFO = { names: [{ name: 'SimpleMXML', qName: 'SimpleMXML' }] };
+SimpleMXML_Project.prototype.FLEXJS_CLASS_INFO = { names: [{ name: 'SimpleMXML_Project', qName: 'SimpleMXML_Project' }] };
+
+
+/**
+ * @private
+ * @type {example.Component}
+ */
+SimpleMXML_Project.prototype.myComponent = new example.Component();
 
 
 /**
@@ -62,16 +58,8 @@ SimpleMXML.prototype.FLEXJS_CLASS_INFO = { names: [{ name: 'SimpleMXML', qName: 
  *
  * @expose
  */
-SimpleMXML.prototype.start = function () {
-this.$ID0 = new spark.components.Button();
-this.$ID0.label = 'hello';
-this.$ID0.x = 100;
-this.$ID0.render();
-this.$ID1 = new spark.components.Button();
-this.$ID1.label = 'bye';
-this.$ID1.x = 200;
-this.$ID1.render();
-
+SimpleMXML_Project.prototype.start = function () {
+this.null.minHeight = 600;
+this.null.minWidth = 955;
 
 };
-

@@ -17,7 +17,7 @@
  *
  */
 
-package org.apache.flex.compiler.internal.codegen.js.flexjs;
+package org.apache.flex.compiler.internal.codegen.js.vf2js;
 
 import org.apache.flex.compiler.asdoc.flexjs.ASDocComment;
 import org.apache.flex.compiler.clients.MXMLJSC;
@@ -27,6 +27,7 @@ import org.apache.flex.compiler.common.DependencyType;
 import org.apache.flex.compiler.constants.IASKeywordConstants;
 import org.apache.flex.compiler.constants.IASLanguageConstants;
 import org.apache.flex.compiler.definitions.IClassDefinition;
+import org.apache.flex.compiler.definitions.IDefinition;
 import org.apache.flex.compiler.definitions.IFunctionDefinition;
 import org.apache.flex.compiler.definitions.ITypeDefinition;
 import org.apache.flex.compiler.definitions.references.IReference;
@@ -40,11 +41,12 @@ import org.apache.flex.compiler.tree.as.IDefinitionNode;
 import org.apache.flex.compiler.tree.as.IExpressionNode;
 import org.apache.flex.compiler.tree.as.IFunctionNode;
 import org.apache.flex.compiler.tree.as.IParameterNode;
+import org.apache.flex.compiler.tree.as.IVariableNode;
 
-public class JSFlexJSDocEmitter extends JSGoogDocEmitter
+public class JSVF2JSDocEmitter extends JSGoogDocEmitter
 {
 
-    public JSFlexJSDocEmitter(IJSEmitter emitter)
+    public JSVF2JSDocEmitter(IJSEmitter emitter)
     {
         super(emitter);
     }
@@ -181,6 +183,31 @@ public class JSFlexJSDocEmitter extends JSGoogDocEmitter
                 end();
         }
     }
+    
+    @Override
+    public void emitVarDoc(IVariableNode node, IDefinition def)
+    {
+        String packageName = "";
+        if (def != null)
+            packageName = def.getPackageName();
+
+        if (!node.isConst())
+        {
+            IDefinition ndef = node.getDefinition();
+            if (emitter != null && emitter instanceof JSVF2JSEmitter)
+            {
+            	ICompilerProject project = ((JSVF2JSEmitter)emitter).project;
+                if (project != null)
+                {
+                    packageName = ((ITypeDefinition)ndef.resolveType(project))
+                            .getPackageName();
+                }
+            }
+        }
+        
+        emitTypeShort(node, packageName);
+    }
+
     
     public void emitInterfaceMemberDoc(IDefinitionNode node, ICompilerProject project)
     {

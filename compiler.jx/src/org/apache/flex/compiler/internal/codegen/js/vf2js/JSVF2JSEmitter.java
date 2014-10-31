@@ -17,7 +17,7 @@
  *
  */
 
-package org.apache.flex.compiler.internal.codegen.js.flexjs;
+package org.apache.flex.compiler.internal.codegen.js.vf2js;
 
 import java.io.FilterWriter;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.Set;
 
 import org.apache.flex.compiler.codegen.IASGlobalFunctionConstants;
 import org.apache.flex.compiler.codegen.IDocEmitter;
-import org.apache.flex.compiler.codegen.js.flexjs.IJSFlexJSEmitter;
+import org.apache.flex.compiler.codegen.js.vf2js.IJSVF2JSEmitter;
 import org.apache.flex.compiler.common.ASModifier;
 import org.apache.flex.compiler.common.ModifiersSet;
 import org.apache.flex.compiler.definitions.IClassDefinition;
@@ -42,6 +42,7 @@ import org.apache.flex.compiler.definitions.IPackageDefinition;
 import org.apache.flex.compiler.definitions.ITypeDefinition;
 import org.apache.flex.compiler.internal.codegen.as.ASEmitterTokens;
 import org.apache.flex.compiler.internal.codegen.js.JSEmitterTokens;
+import org.apache.flex.compiler.internal.codegen.js.flexjs.JSFlexJSEmitterTokens;
 import org.apache.flex.compiler.internal.codegen.js.goog.JSGoogEmitter;
 import org.apache.flex.compiler.internal.codegen.js.goog.JSGoogEmitterTokens;
 import org.apache.flex.compiler.internal.definitions.AccessorDefinition;
@@ -59,6 +60,7 @@ import org.apache.flex.compiler.internal.tree.as.BinaryOperatorAssignmentNode;
 import org.apache.flex.compiler.internal.tree.as.ChainedVariableNode;
 import org.apache.flex.compiler.internal.tree.as.FunctionCallNode;
 import org.apache.flex.compiler.internal.tree.as.FunctionNode;
+import org.apache.flex.compiler.internal.tree.as.NonResolvingIdentifierNode;
 import org.apache.flex.compiler.internal.tree.as.ParameterNode;
 import org.apache.flex.compiler.internal.tree.as.RegExpLiteralNode;
 import org.apache.flex.compiler.internal.tree.as.UnaryOperatorAtNode;
@@ -70,6 +72,7 @@ import org.apache.flex.compiler.tree.as.IAccessorNode;
 import org.apache.flex.compiler.tree.as.IBinaryOperatorNode;
 import org.apache.flex.compiler.tree.as.IClassNode;
 import org.apache.flex.compiler.tree.as.IDefinitionNode;
+import org.apache.flex.compiler.tree.as.IEmbedNode;
 import org.apache.flex.compiler.tree.as.IExpressionNode;
 import org.apache.flex.compiler.tree.as.IForLoopNode;
 import org.apache.flex.compiler.tree.as.IFunctionCallNode;
@@ -92,15 +95,14 @@ import org.apache.flex.compiler.utils.ASNodeUtils;
 import org.apache.flex.compiler.utils.NativeUtils;
 
 /**
- * Concrete implementation of the 'goog' JavaScript production.
+ * Concrete implementation of the 'vf2js' JavaScript production.
  * 
- * @author Michael Schmalle
  * @author Erik de Bruin
  */
-public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
+public class JSVF2JSEmitter extends JSGoogEmitter implements IJSVF2JSEmitter
 {
 
-    public JSFlexJSEmitter(FilterWriter out)
+    public JSVF2JSEmitter(FilterWriter out)
     {
         super(out);
     }
@@ -254,6 +256,48 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
     }
 
     @Override
+    public void emitVarDeclaration(IVariableNode node)
+    {
+        if (!(node instanceof ChainedVariableNode))
+        {
+            emitMemberKeyword(node);
+        }
+
+        IExpressionNode avnode = node.getAssignedValueNode();
+        if (avnode != null)
+        {
+            IDefinition def = avnode.resolveType(getWalker().getProject());
+
+            String opcode = avnode.getNodeID().getParaphrase();
+            if (opcode != "AnonymousFunction")
+                getDoc().emitVarDoc(node, def);
+        }
+        else
+        {
+            getDoc().emitVarDoc(node, null);
+        }
+
+        emitDeclarationName(node);
+        if (!(avnode instanceof IEmbedNode))
+        	emitAssignedValue(avnode);
+
+        if (!(node instanceof ChainedVariableNode))
+        {
+            // check for chained variables
+            int len = node.getChildCount();
+            for (int i = 0; i < len; i++)
+            {
+                IASNode child = node.getChild(i);
+                if (child instanceof ChainedVariableNode)
+                {
+                    writeToken(ASEmitterTokens.COMMA);
+                    emitVarDeclaration((IVariableNode) child);
+                }
+            }
+        }
+    }
+
+    @Override
     public void emitField(IVariableNode node)
     {
         IDefinition definition = getClassDefinition(node);
@@ -288,7 +332,7 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
                 + node.getName());
 
         IExpressionNode vnode = node.getAssignedValueNode();
-        if (vnode != null)
+        if (vnode != null && !(vnode instanceof IEmbedNode))
         {
             write(ASEmitterTokens.SPACE);
             writeToken(ASEmitterTokens.EQUAL);
@@ -522,6 +566,9 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
 
     private boolean writeThis(IIdentifierNode node)
     {
+        if (node instanceof NonResolvingIdentifierNode)
+            return false;
+        
         IClassNode classNode = (IClassNode) node
                 .getAncestorOfType(IClassNode.class);
 
@@ -585,6 +632,13 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
             {
                 if (identifierIsMemberAccess)
                 {
+                	if (parentNode.getNodeID() == ASTNodeID.MemberAccessExpressionID
+                            && parentNode.getChild(0).getNodeID() == ASTNodeID.SuperID
+                            && !isSuperCallForOverride(node))
+                	{
+                		return true;
+                	}
+                	
                     return node == firstChild;
                 }
                 else
@@ -752,7 +806,8 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
             }
 
             if (parentNode.getNodeID() == ASTNodeID.MemberAccessExpressionID
-                    && parentNode.getChild(0).getNodeID() == ASTNodeID.SuperID)
+                    && parentNode.getChild(0).getNodeID() == ASTNodeID.SuperID
+                    && isSuperCallForOverride(node))
             {
                 IClassNode cnode = (IClassNode) node
                         .getAncestorOfType(IClassNode.class);
@@ -776,6 +831,10 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
                     writeToken(ASEmitterTokens.COMMA);
                 }
             }
+            else if (node instanceof NonResolvingIdentifierNode)
+            {
+                write(node.getName());
+            }
             else
             {
                 writeGetSetPrefix(!isAssignment);
@@ -789,7 +848,8 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
                         .getRightOperandNode());
             }
 
-            write(ASEmitterTokens.PAREN_CLOSE);
+            if (!(node instanceof NonResolvingIdentifierNode))
+            	write(ASEmitterTokens.PAREN_CLOSE);
         }
         else if (emitName)
         {
@@ -800,6 +860,17 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
         }
     }
 
+    private boolean isSuperCallForOverride(IIdentifierNode node)
+    {
+    	IFunctionNode pfnode = (IFunctionNode) node.
+    			getAncestorOfType(FunctionNode.class);
+
+    	if (pfnode == null)
+    		return false;
+    	
+    	return pfnode.getName().equals(node.getName());
+    }
+    
     //--------------------------------------------------------------------------
 
     @Override
@@ -854,7 +925,12 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
             if (fnode.getNodeID() == ASTNodeID.GetterID
                     || fnode.getNodeID() == ASTNodeID.SetterID)
                 writeGetSetPrefix(fnode.getNodeID() == ASTNodeID.GetterID);
-            write(fnode.getName());
+            
+            // (erikdebruin): write(fnode.getName());
+            IMemberAccessExpressionNode aenode = 
+            		(IMemberAccessExpressionNode) fcnode.getNameNode();
+            write(((IIdentifierNode) aenode.getRightOperandNode()).getName());
+            
             write(ASEmitterTokens.SINGLE_QUOTE);
         }
 
@@ -1223,7 +1299,7 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
     @Override
     public IDocEmitter getDocEmitter()
     {
-        return new JSFlexJSDocEmitter(this);
+        return new JSVF2JSDocEmitter(this);
     }
 
     @Override
@@ -1611,6 +1687,21 @@ public class JSFlexJSEmitter extends JSGoogEmitter implements IJSFlexJSEmitter
             s = s.replaceAll("__TAB_PLACEHOLDER__", "\\\\t");
             s = s.replaceAll("__CR_PLACEHOLDER__", "\\\\r");
             s = s.replaceAll("__NEWLINE_PLACEHOLDER__", "\\\\n");
+            
+            Character c = s.charAt(0);
+            if (c.equals('"'))
+            {
+            	s = s.substring(1, s.length() - 1);
+            	s = s.replaceAll("\"", "\\\\\"");
+            	s = "\"" + s + "\"";
+            }
+            if (s.length() == 3)
+            {
+            	c = s.charAt(1);
+	            if (c.equals('\\')) {
+	            	s = "\"\\\\\"";
+	            }
+            }
         }
         
         if (!isWritten)

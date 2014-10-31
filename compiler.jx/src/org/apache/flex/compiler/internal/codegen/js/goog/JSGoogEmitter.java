@@ -55,6 +55,7 @@ import org.apache.flex.compiler.tree.as.IBinaryOperatorNode;
 import org.apache.flex.compiler.tree.as.IClassNode;
 import org.apache.flex.compiler.tree.as.IContainerNode;
 import org.apache.flex.compiler.tree.as.IDefinitionNode;
+import org.apache.flex.compiler.tree.as.IEmbedNode;
 import org.apache.flex.compiler.tree.as.IExpressionNode;
 import org.apache.flex.compiler.tree.as.IForLoopNode;
 import org.apache.flex.compiler.tree.as.IFunctionCallNode;
@@ -87,7 +88,7 @@ public class JSGoogEmitter extends JSEmitter implements IJSGoogEmitter
 
     protected List<String> propertyNames = new ArrayList<String>();
 
-    protected ICompilerProject project;
+    public ICompilerProject project;
 
     protected IJSGoogDocEmitter getDoc()
     {
@@ -385,7 +386,8 @@ public class JSGoogEmitter extends JSEmitter implements IJSGoogEmitter
         }
 
         emitDeclarationName(node);
-        emitAssignedValue(avnode);
+        if (!(avnode instanceof IEmbedNode))
+        	emitAssignedValue(avnode);
 
         if (!(node instanceof ChainedVariableNode))
         {
