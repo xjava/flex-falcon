@@ -101,6 +101,11 @@
             Problem area: When including an mx:Repeater, Falcon produces operand stack underflow exceptions.
         -->
         <module>mx-repeater</module>
+
+        <!--
+            Problem area: the advancedTelemetry option doesn't seem to be supported.
+        -->
+        <module>advanced-telemetry-not-supported</module>
     </modules>
 
 </project>
