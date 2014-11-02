@@ -16,10 +16,18 @@
  *  limitations under the License.
  *
  */
+package {
 
-@namespace s "library://ns.adobe.com/flex/spark";
+[Bindable]
+public class TestClass implements TestInterface {
 
-Label
-{
-	fontSize: 10px;
+    public var tst:String;
+
+    public function TestClass() {
+    }
+
+    public function someFunct():void {
+    }
+
+}
 }

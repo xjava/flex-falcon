@@ -23,7 +23,7 @@
     <groupId>org.apache.flex.compiler.falcon.tests</groupId>
     <artifactId>bindable-interface</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>swc</packaging>
+    <packaging>swf</packaging>
 
 	<build>
         <sourceDirectory>src/main/flex</sourceDirectory>
@@ -33,13 +33,35 @@
                 <artifactId>flexmojos-maven-plugin</artifactId>
                 <version>7.1.0-SNAPSHOT</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <sourceFile>TestApplication.mxml</sourceFile>
+                </configuration>
                 <dependencies>
-                    <dependency>
+                    <!--dependency>
                         <groupId>org.apache.flex.compiler</groupId>
                         <artifactId>falcon-compiler</artifactId>
                         <version>0.0.3-SNAPSHOT</version>
+                    </dependency-->
+                    <dependency>
+                        <groupId>org.apache.flex</groupId>
+                        <artifactId>compiler</artifactId>
+                        <version>4.13.0.20140701</version>
+                        <type>pom</type>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.flex.compiler.falcon.tests</groupId>
+                <artifactId>bytecode-dumper</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>dump</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -29,6 +29,10 @@
 
     <modules>
         <!--
+            Tool for comparing swfdump output from the default and falcon compiler
+        -->
+        <module>bytecode-dumper</module>
+        <!--
             Problem area: ASDoc doesn't work at all.
         -->
 
