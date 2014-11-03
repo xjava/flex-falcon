@@ -57,6 +57,7 @@
             - The application compiles, but is ony executable in flashplayer without
               errors, when compiled with the default compiler.
         -->
+        <module>test-java</module>
         <module>generated-sources</module>
 
         <!--
@@ -75,14 +76,14 @@
         <!--
             Problem area: It seems that runtime loaded locales don't work in Falcon
         -->
-        <module>l10n-locales-runtime</module>
+        <!--module>l10n-locales-runtime</module-->
 
         <!--
             Problem area: It seems FontEmbedding is currently completely disabled.
             But still it seems that locating the embedded fonts in a resources directory
             will prevent Falcon from finding it.
         -->
-        <module>no-font-embedding</module>
+        <!--module>no-font-embedding</module-->
 
         <!--
             Problem area: Embeding of images (or other static resrouces)

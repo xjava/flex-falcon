@@ -37,7 +37,7 @@
                 <version>7.1.0-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <sourceFile>test/SparkModule.mxml</sourceFile>
+                    <sourceFile>SparkModule.mxml</sourceFile>
                 </configuration>
                 <dependencies>
                     <dependency>

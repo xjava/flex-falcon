@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,18 +17,14 @@
   limitations under the License.
 
 -->
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-               xmlns:s="library://ns.adobe.com/flex/spark">
-    
-    <fx:Script>
-        <![CDATA[
-        import a.b.c.d.TestModel;
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-        private var tst:TestModel = new TestModel();
-        
-        ]]>
-    </fx:Script>
-    
-    <s:Label text="Generated Sources"/>
-    
-</s:Application>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.apache.flex.compiler.falcon.tests</groupId>
+    <artifactId>test-java</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+</project>
