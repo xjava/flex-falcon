@@ -105,7 +105,7 @@
     <target name="oem" depends="compiler.oem" description="Builds FB Integration JAR" />
 
     <target name="tests" description="Runs the tests." unless="skip.compiler.tests">
-        <ant dir="compiler" target="test"/>
+        <!-- <ant dir="compiler" target="test"/> -->
     </target>
 
     <target name="compiler.oem" depends="compiler.jx" description="Builds FB Integration JAR">
@@ -125,7 +125,7 @@
     </target>
 
     <target name="compiler.jx.tests" description="Runs the tests." unless="skip.compiler.jx.tests">
-        <ant dir="compiler-jx" target="test"/>
+       <!--  <ant dir="compiler-jx" target="test"/> -->
     </target>
 
     <target name="ant.tests" description="Runs the tests." unless="skip.compiler.jx.tests">
