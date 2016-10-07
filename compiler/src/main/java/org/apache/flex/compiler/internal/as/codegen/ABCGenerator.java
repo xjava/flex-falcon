@@ -584,7 +584,7 @@ public class ABCGenerator implements ICodeGenerator
         		    if (initValue == null)
         		    {
         		        IParameterNode paramNode = arg.getNode();
-        		        scope.addProblem(new NonConstantParamInitializerProblem(paramNode.getAssignedValueNode()));
+//        		        scope.addProblem(new NonConstantParamInitializerProblem(paramNode.getAssignedValueNode()));
         	            // re-write non-constant expression to undefined, so resulting ABC will pass the verifier.
         	            initValue = ABCConstants.UNDEFINED_VALUE;
         		    }

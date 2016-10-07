@@ -1737,14 +1737,15 @@ public class MethodBodySemanticChecker
         }
         else if ( utils.isInInstanceFunction(iNode) && utils.isInaccessible((ASScope)utils.getEnclosingFunctionDefinition(iNode).getContainingScope(), b) )
         {
-            return new InaccessiblePropertyReferenceProblem(
-                    iNode, 
-                    b.getName().getBaseName(), 
-                    utils.getEnclosingClassName(iNode)
-                );
+//            return new InaccessiblePropertyReferenceProblem(
+//                    iNode, 
+//                    b.getName().getBaseName(), 
+//                    utils.getEnclosingClassName(iNode)
+//                );
         }
 
-        return new AccessUndefinedPropertyProblem(iNode, unknown_name);
+//        return new AccessUndefinedPropertyProblem(iNode, unknown_name);
+        return null;
     }
     
     public ICompilerProblem isMissingMember(IASNode iNode)
@@ -1755,8 +1756,8 @@ public class MethodBodySemanticChecker
             if (iNode == mae.getRightOperandNode())
             {
                 ITypeDefinition leftDef = mae.getLeftOperandNode().resolveType(project);
-                if (!leftDef.isDynamic())
-                    return new AccessUndefinedMemberProblem(iNode, ((IdentifierNode)iNode).getName(), leftDef.getQualifiedName());
+//                if (!leftDef.isDynamic())
+//                    return new AccessUndefinedMemberProblem(iNode, ((IdentifierNode)iNode).getName(), leftDef.getQualifiedName());
             }
         }
         return null;
@@ -1946,15 +1947,18 @@ public class MethodBodySemanticChecker
                         }
                     }
                 }
-                if (p== null)
-                {
-                    // If right side not blank, then use normal undefined member
-                    p = new AccessUndefinedMemberProblem(
-                            member_node, 
-                            member.getName().getBaseName(), 
-                            utils.getTypeOfStem(iNode));
+//                if (p== null)
+//                {
+//                    // If right side not blank, then use normal undefined member
+//                    p = new AccessUndefinedMemberProblem(
+//                            member_node, 
+//                            member.getName().getBaseName(), 
+//                            utils.getTypeOfStem(iNode));
+//                }
+                if (p!= null){
+                	addProblem(p);
                 }
-                addProblem(p);
+                
             }
         }
         else if ( utils.isWriteOnlyDefinition(member.getDefinition()) )

@@ -4719,7 +4719,7 @@ public class ABCGeneratingReducer
         // raw_default_value will be null if the parameter's default value was not a constant expression.
         if( raw_default_value == null )
         {
-            currentScope.addProblem(new NonConstantParamInitializerProblem(parameter_node.getAssignedValueNode()));
+            //currentScope.addProblem(new NonConstantParamInitializerProblem(parameter_node.getAssignedValueNode()));
             // re-write non-constant expression to undefined, so resulting ABC will pass the verifier.
             transformed_default_value = new PooledValue(ABCConstants.UNDEFINED_VALUE);
         }
