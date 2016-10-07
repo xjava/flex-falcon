@@ -390,18 +390,18 @@ public class MethodBodySemanticChecker
 
         if (!SemanticUtils.isValidTypeConversion(expected_type, actual_type, project, currentScope.getInInvisibleCompilationUnit()))
         {
-            addProblem(new ImplicitTypeCheckCoercionToUnrelatedTypeProblem(iNode, actual_type.getBaseName(), expected_type.getBaseName()));
+            //addProblem(new ImplicitTypeCheckCoercionToUnrelatedTypeProblem(iNode, actual_type.getBaseName(), expected_type.getBaseName()));
         }
         else
         {
             SpecialValue value = getSpecialValue((IExpressionNode)iNode);
             if (value == SpecialValue.UNDEFINED) // test for undefined
             {
-                addProblem(new ImplicitTypeCheckCoercionToUnrelatedTypeProblem(iNode, IASLanguageConstants.UNDEFINED, expected_type.getBaseName()));                
+                //addProblem(new ImplicitTypeCheckCoercionToUnrelatedTypeProblem(iNode, IASLanguageConstants.UNDEFINED, expected_type.getBaseName()));                
             }
             else if (iNode instanceof LiteralNode && IASKeywordConstants.NULL.equals(((LiteralNode)iNode).getValue())) // test for null
             {
-                addProblem(new ImplicitTypeCheckCoercionToUnrelatedTypeProblem(iNode, IASKeywordConstants.NULL, expected_type.getBaseName()));
+                //addProblem(new ImplicitTypeCheckCoercionToUnrelatedTypeProblem(iNode, IASKeywordConstants.NULL, expected_type.getBaseName()));
             }
         }
     }
@@ -570,11 +570,11 @@ public class MethodBodySemanticChecker
             {
                 if ( utils.isInstanceOf(expected_type, actual_type) )
                 {
-                    addProblem(new ImplicitCoercionToSubtypeProblem(iNode, actual_type.getBaseName(), expected_type.getBaseName()));
+                    //addProblem(new ImplicitCoercionToSubtypeProblem(iNode, actual_type.getBaseName(), expected_type.getBaseName()));
                 }
                 else
                 {
-                    addProblem(new ImplicitCoercionToUnrelatedTypeProblem(iNode, actual_type.getBaseName(), expected_type.getBaseName()));
+                    //addProblem(new ImplicitCoercionToUnrelatedTypeProblem(iNode, actual_type.getBaseName(), expected_type.getBaseName()));
                 }
             }
         }
@@ -665,10 +665,10 @@ public class MethodBodySemanticChecker
         {
             // If we are trying to delete a member of a class, but the member doesn't exists,
             // The log the problem for that
-            addProblem(new AccessUndefinedMemberProblem(
-                    roundUpUsualSuspects(binding, iNode),
-                    binding.getName().getBaseName(),
-                    utils.getTypeOfBase(binding.getNode())));
+//            addProblem(new AccessUndefinedMemberProblem(
+//                    roundUpUsualSuspects(binding, iNode),
+//                    binding.getName().getBaseName(),
+//                    utils.getTypeOfBase(binding.getNode())));
         }
         else
         {
@@ -742,7 +742,7 @@ public class MethodBodySemanticChecker
 
         if ( actuals.size() > formals.length && !last_is_rest )
         {
-            addProblem(new TooManyFunctionParametersProblem(iNode, formals.length));
+            //addProblem(new TooManyFunctionParametersProblem(iNode, formals.length));
         }
 
         //  Compute the number of required parameters.
@@ -828,26 +828,26 @@ public class MethodBodySemanticChecker
         {
             if ( utils.isInaccessible(iNode, method_binding) )
             {
-                addProblem(new InaccessibleMethodReferenceProblem( 
-                    roundUpUsualSuspects(method_binding, iNode), 
-                    method_binding.getName().getBaseName(),
-                    utils.getTypeOfStem(iNode)
-                ));
+//                addProblem(new InaccessibleMethodReferenceProblem( 
+//                    roundUpUsualSuspects(method_binding, iNode), 
+//                    method_binding.getName().getBaseName(),
+//                    utils.getTypeOfStem(iNode)
+//                ));
             }
             else if ( SemanticUtils.hasExplicitStem(iNode) && utils.hasUnderlyingType(iNode) )
             {
-                addProblem(new StrictUndefinedMethodProblem( 
-                    roundUpUsualSuspects(method_binding, iNode), 
-                    method_binding.getName().getBaseName(),
-                    utils.getTypeOfStem(iNode)
-                ));
+//                addProblem(new StrictUndefinedMethodProblem( 
+//                    roundUpUsualSuspects(method_binding, iNode), 
+//                    method_binding.getName().getBaseName(),
+//                    utils.getTypeOfStem(iNode)
+//                ));
             }
             else
             {
-                addProblem(new CallUndefinedMethodProblem( 
-                    roundUpUsualSuspects(method_binding, iNode), 
-                    method_binding.getName().getBaseName()
-                ));
+//                addProblem(new CallUndefinedMethodProblem( 
+//                    roundUpUsualSuspects(method_binding, iNode), 
+//                    method_binding.getName().getBaseName()
+//                ));
             }
         }
         else if ( def instanceof FunctionDefinition )
@@ -866,7 +866,7 @@ public class MethodBodySemanticChecker
                     varType.equals(project.getBuiltinType(BuiltinType.UINT)) ||
                     varType.equals(project.getBuiltinType(BuiltinType.STRING))))
             {
-                addProblem(new CallNonFunctionProblem(iNode, method_binding.getName().getBaseName()));
+                //addProblem(new CallNonFunctionProblem(iNode, method_binding.getName().getBaseName()));
             }
         }
         else if ( def == project.getBuiltinType(BuiltinType.ARRAY) )
@@ -922,7 +922,7 @@ public class MethodBodySemanticChecker
                 }
                 default:
                 {
-                    addProblem(new TooManyFunctionParametersProblem(iNode, 1));
+                    //addProblem(new TooManyFunctionParametersProblem(iNode, 1));
                     break;
             }
         }
@@ -1923,11 +1923,11 @@ public class MethodBodySemanticChecker
             
             if ( utils.isInaccessible(iNode, member) )
             {
-                addProblem(new InaccessiblePropertyReferenceProblem(
-                    member_node, 
-                    member.getName().getBaseName(), 
-                    utils.getTypeOfStem(iNode))
-                );
+//                addProblem(new InaccessiblePropertyReferenceProblem(
+//                    member_node, 
+//                    member.getName().getBaseName(), 
+//                    utils.getTypeOfStem(iNode))
+//                );
             }
             else
             {
@@ -2025,10 +2025,10 @@ public class MethodBodySemanticChecker
             // Note: don't have to check accessability because
             // AS3 mandates constructors be public.
 
-            addProblem(new CallUndefinedMethodProblem(
-                roundUpUsualSuspects(class_binding, iNode),
-                class_binding.getName().getBaseName()
-            ));
+//            addProblem(new CallUndefinedMethodProblem(
+//                roundUpUsualSuspects(class_binding, iNode),
+//                class_binding.getName().getBaseName()
+//            ));
         }
         else if ( def instanceof InterfaceDefinition )
         {

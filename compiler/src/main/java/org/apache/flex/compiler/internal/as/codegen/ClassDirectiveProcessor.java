@@ -1004,7 +1004,7 @@ class ClassDirectiveProcessor extends DirectiveProcessor
                 if( override == null )
                 {
                     // Didn't find the function we are supposed to be overriding
-                    problems.add(new OverrideNotFoundProblem(node.getNameExpressionNode()));
+                    //problems.add(new OverrideNotFoundProblem(node.getNameExpressionNode()));
                 }
                 else
                 {
@@ -1028,7 +1028,7 @@ class ClassDirectiveProcessor extends DirectiveProcessor
                 else
                 {
                     // found overriden function, but function not marked as override
-                    problems.add(new FunctionNotMarkedOverrideProblem(node.getNameExpressionNode()));
+                    //problems.add(new FunctionNotMarkedOverrideProblem(node.getNameExpressionNode()));
                 }
             }
         }
