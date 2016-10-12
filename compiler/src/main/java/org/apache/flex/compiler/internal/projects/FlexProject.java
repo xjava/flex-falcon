@@ -2137,6 +2137,13 @@ public class FlexProject extends ASProject implements IFlexProject
             return def1;
         if (package2.equals(thisPackage) && package1.length() == 0)
             return def2;
+        if (name.equals("Event") || name.equals("MouseEvent") || name.equals("FocusEvent")){
+        	if(package1.equals("flash.events")){
+        		return def1;
+        	}else{
+        		return def2;
+        	}
+        }
         if (package1.length() == 0 || package2.length() == 0)
         {
             // now check to see if the class was imported in the window package.
