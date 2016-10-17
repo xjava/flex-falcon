@@ -104,7 +104,7 @@ public class MXMLFlexJSPublisher extends JSGoogPublisher implements IJSPublisher
     private boolean isMarmotinniRun;
     private String outputPathParameter;
     private boolean useStrictPublishing;
-    private String closureLibDirPath;
+    private String closureLibDirPath = "/Users/nikornlansa/mind/flex/flex-asjs/js/lib/google/closure-library";
 
     @Override
     public File getOutputFolder()
@@ -182,7 +182,7 @@ public class MXMLFlexJSPublisher extends JSGoogPublisher implements IJSPublisher
         // as closure-lib parameter.
         if (((JSGoogConfiguration) configuration).isClosureLibSet())
         {
-            closureLibDirPath = ((JSGoogConfiguration) configuration).getClosureLib();
+            //closureLibDirPath = ((JSGoogConfiguration) configuration).getClosureLib();
         }
         else
         {
@@ -222,12 +222,12 @@ public class MXMLFlexJSPublisher extends JSGoogPublisher implements IJSPublisher
                 // The compiler automatically adds a "closure" to the lib dir
                 // path,
                 // so we omit this here.
-                closureLibDirPath = intermediateDir.getParentFile().getPath();
+                //closureLibDirPath = intermediateDir.getParentFile().getPath();
             }
             // Fallback to the default.
             else
             {
-                closureLibDirPath = ((JSGoogConfiguration) configuration).getClosureLib();
+                //closureLibDirPath = ((JSGoogConfiguration) configuration).getClosureLib();
             }
         }
 	

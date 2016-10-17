@@ -44,30 +44,35 @@ public class ASBeforeNodeStrategy implements IASNodeStrategy
     @Override
     public void handle(IASNode node)
     {
-        if (node.getNodeID() == ASTNodeID.BlockID)
-        {
-            IASNode parent = node.getParent();
-            IContainerNode container = (IContainerNode) node;
-            ContainerType type = container.getContainerType();
-
-            if (parent.getNodeID() != ASTNodeID.LabledStatementID)
+    	try{
+    		if (node.getNodeID() == ASTNodeID.BlockID)
             {
-                if (node.getChildCount() != 0)
-                    emitter.indentPush();
-            }
+                IASNode parent = node.getParent();
+                IContainerNode container = (IContainerNode) node;
+                ContainerType type = container.getContainerType();
 
-            // switch cases are SYNTHESIZED
-            if (type != ContainerType.IMPLICIT
-                    && type != ContainerType.SYNTHESIZED)
-            {
-                emitter.emitBlockOpen(container);
-            }
+                if (parent.getNodeID() != ASTNodeID.LabledStatementID)
+                {
+                    if (node.getChildCount() != 0)
+                        emitter.indentPush();
+                }
 
-            if (parent.getNodeID() != ASTNodeID.LabledStatementID)
-            {
-                emitter.writeNewline();
+                // switch cases are SYNTHESIZED
+                if (type != ContainerType.IMPLICIT
+                        && type != ContainerType.SYNTHESIZED)
+                {
+                    emitter.emitBlockOpen(container);
+                }
+
+                if (parent.getNodeID() != ASTNodeID.LabledStatementID)
+                {
+                    emitter.writeNewline();
+                }
             }
-        }
+    	}catch(Exception ex){
+    		System.out.println(ex);
+    	}
+        
     }
 
 }

@@ -142,23 +142,28 @@ public class VarDeclarationEmitter extends JSSubEmitter implements
         			IDefinition leftDef = dyn.getLeftOperandNode().resolveType(getProject());
         			IDefinition rightDef = dyn.getRightOperandNode().resolveType(getProject());
         			// numeric indexing?
-        			if (rightDef.getQualifiedName().equals(IASLanguageConstants.Number))
-        			{
-        				IMetaTag[] metas = leftDef.getAllMetaTags();
-        				for (IMetaTag meta : metas)
-        				{
-        					if (meta.getTagName().equals("ArrayElementType"))
-        					{
-        						IMetaTagAttribute[] attrs = meta.getAllAttributes();
-        						for (IMetaTagAttribute attr : attrs)
-        						{
-        							String t = attr.getValue();
-            						if (t.equals(IASLanguageConstants.Number))
-            							valIsNumber = true;
-        						}
-        					}
-        				}
+        			try{
+        				if (rightDef.getQualifiedName().equals(IASLanguageConstants.Number))
+            			{
+            				IMetaTag[] metas = leftDef.getAllMetaTags();
+            				for (IMetaTag meta : metas)
+            				{
+            					if (meta.getTagName().equals("ArrayElementType"))
+            					{
+            						IMetaTagAttribute[] attrs = meta.getAllAttributes();
+            						for (IMetaTagAttribute attr : attrs)
+            						{
+            							String t = attr.getValue();
+                						if (t.equals(IASLanguageConstants.Number))
+                							valIsNumber = true;
+            						}
+            					}
+            				}
+            			}
+        			}catch(Exception ex){
+        				System.out.println(ex);
         			}
+        			
         		}
             }
             String coercion = "";

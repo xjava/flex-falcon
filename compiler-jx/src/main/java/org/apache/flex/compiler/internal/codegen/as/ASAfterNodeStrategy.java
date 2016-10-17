@@ -48,29 +48,35 @@ public class ASAfterNodeStrategy implements IASNodeStrategy
     @Override
     public void handle(IASNode node)
     {
-        if (node.getNodeID() == ASTNodeID.BlockID)
-        {
-            IContainerNode container = (IContainerNode) node;
-            ContainerType type = container.getContainerType();
-            if (type != ContainerType.IMPLICIT
-                    && type != ContainerType.SYNTHESIZED)
+    	try{
+    		if (node.getNodeID() == ASTNodeID.BlockID)
             {
-                if (node.getChildCount() != 0)
+                IContainerNode container = (IContainerNode) node;
+                ContainerType type = container.getContainerType();
+                if (type != ContainerType.IMPLICIT
+                        && type != ContainerType.SYNTHESIZED)
                 {
-                    emitter.indentPop();
-                    emitter.writeNewline();
-                }
+                    if (node.getChildCount() != 0)
+                    {
+                        emitter.indentPop();
+                        emitter.writeNewline();
+                    }
 
-                emitter.emitBlockClose(container);
-            }
-            else if (type == ContainerType.IMPLICIT
-                    || type == ContainerType.SYNTHESIZED)
-            {
-                if (node.getChildCount() != 0)
+                    emitter.emitBlockClose(container);
+                }
+                else if (type == ContainerType.IMPLICIT
+                        || type == ContainerType.SYNTHESIZED)
                 {
-                    emitter.indentPop();
+                    if (node.getChildCount() != 0)
+                    {
+                        emitter.indentPop();
+                    }
                 }
             }
-        }
+    	}catch(Exception ex){
+    		System.out.println(ex);
+    	}
+    	
+    	
     }
 }

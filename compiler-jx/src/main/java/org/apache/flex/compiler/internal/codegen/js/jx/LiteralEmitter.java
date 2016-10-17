@@ -49,60 +49,65 @@ public class LiteralEmitter extends JSSubEmitter implements
         {
             if (node.getLiteralType() == LiteralType.XML)
             {
-            	newlineReplacement = "\\\\\n";
-            	XMLLiteralNode xmlNode = (XMLLiteralNode)node;
-            	if (xmlNode.getContentsNode().getChildCount() == 1)
-            	{
-	            	if (s.contains("'"))
-	            		s = "\"" + s + "\"";
-	            	else
-	            		s = "'" + s + "'";
-            	}
-            	else
-            	{
-        			StringBuilder sb = new StringBuilder();
-            		// probably contains {initializers}
-        			boolean inAttribute = false;
-            		int n = xmlNode.getContentsNode().getChildCount();
-            		for (int i = 0; i < n; i++)
-            		{
-            			if (i > 0)
-            				sb.append(" + ");
-            			IASNode child = xmlNode.getContentsNode().getChild(i);
-            			if (child instanceof LiteralNode)
-            			{
-            				s = ((LiteralNode)child).getValue(true);
-        	            	if (s.contains("'"))
-        	            		sb.append("\"" + s + "\"");
-        	            	else
-        	            		sb.append("'" + s + "'");
-            			}
-            			else
-            			{
-            				s = getEmitter().stringifyNode(child);
-            				if (inAttribute)
-            				{
-            					sb.append("'\"' + ");
+            	try{
+            		newlineReplacement = "\\\\\n";
+                	XMLLiteralNode xmlNode = (XMLLiteralNode)node;
+                	if (xmlNode.getContentsNode().getChildCount() == 1)
+                	{
+    	            	if (s.contains("'"))
+    	            		s = "\"" + s + "\"";
+    	            	else
+    	            		s = "'" + s + "'";
+                	}
+                	else
+                	{
+            			StringBuilder sb = new StringBuilder();
+                		// probably contains {initializers}
+            			boolean inAttribute = false;
+                		int n = xmlNode.getContentsNode().getChildCount();
+                		for (int i = 0; i < n; i++)
+                		{
+                			if (i > 0)
+                				sb.append(" + ");
+                			IASNode child = xmlNode.getContentsNode().getChild(i);
+                			if (child instanceof LiteralNode)
+                			{
+                				s = ((LiteralNode)child).getValue(true);
+            	            	if (s.contains("'"))
+            	            		sb.append("\"" + s + "\"");
+            	            	else
+            	            		sb.append("'" + s + "'");
+                			}
+                			else
+                			{
+                				s = getEmitter().stringifyNode(child);
+                				if (inAttribute)
+                				{
+                					sb.append("'\"' + ");
 
-            					sb.append(s);
-            					
-            					sb.append(" + '\"'");
-            				}
-            				else
-            					sb.append(s);
-            			}
-        				inAttribute = s.equals("=");
-            		}
-            		s = sb.toString();
+                					sb.append(s);
+                					
+                					sb.append(" + '\"'");
+                				}
+                				else
+                					sb.append(s);
+                			}
+            				inAttribute = s.equals("=");
+                		}
+                		s = sb.toString();
+                	}
+                    char c = s.charAt(0);
+                    if (c == '"')
+                    {
+                        s = s.substring(1, s.length() - 1);
+                        s = s.replace("\"", "\\\"");
+                        s = "\"" + s + "\"";
+                    }
+                    s = "new XML( " + s + ")";
+            	}catch(Exception ex){
+            		System.out.println(ex);
             	}
-                char c = s.charAt(0);
-                if (c == '"')
-                {
-                    s = s.substring(1, s.length() - 1);
-                    s = s.replace("\"", "\\\"");
-                    s = "\"" + s + "\"";
-                }
-                s = "new XML( " + s + ")";
+            	
             }
             s = s.replaceAll("\n", "__NEWLINE_PLACEHOLDER__");
             s = s.replaceAll("\r", "__CR_PLACEHOLDER__");

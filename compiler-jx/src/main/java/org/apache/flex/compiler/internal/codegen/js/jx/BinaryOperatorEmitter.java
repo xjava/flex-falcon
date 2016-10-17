@@ -295,19 +295,23 @@ public class BinaryOperatorEmitter extends JSSubEmitter implements
         			// numeric indexing?
         			if (rDef.getQualifiedName().equals(IASLanguageConstants.Number))
         			{
-        				IMetaTag[] metas = lDef.getAllMetaTags();
-        				for (IMetaTag meta : metas)
-        				{
-        					if (meta.getTagName().equals("ArrayElementType"))
-        					{
-        						IMetaTagAttribute[] attrs = meta.getAllAttributes();
-        						for (IMetaTagAttribute attr : attrs)
-        						{
-        							String t = attr.getValue();
-            						if (t.equals(IASLanguageConstants.Number))
-            							rightIsNumber = true;
-        						}
-        					}
+        				try{
+        					IMetaTag[] metas = lDef.getAllMetaTags();
+            				for (IMetaTag meta : metas)
+            				{
+            					if (meta.getTagName().equals("ArrayElementType"))
+            					{
+            						IMetaTagAttribute[] attrs = meta.getAllAttributes();
+            						for (IMetaTagAttribute attr : attrs)
+            						{
+            							String t = attr.getValue();
+                						if (t.equals(IASLanguageConstants.Number))
+                							rightIsNumber = true;
+            						}
+            					}
+            				}
+        				}catch(Exception ex){
+        					System.out.println(ex);
         				}
         			}
         		}
