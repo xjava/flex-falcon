@@ -484,6 +484,7 @@ public class BinaryOperatorEmitter extends JSSubEmitter implements
                      write((id == ASTNodeID.Op_LogicalAndAssignID) ? ASEmitterTokens.LOGICAL_AND
                              : ASEmitterTokens.LOGICAL_OR);
             	}catch(Exception ex){
+            		write(node.getOperator().getOperatorText());
             		System.out.println(ex);
             	}
                
