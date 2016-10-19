@@ -468,20 +468,25 @@ public class BinaryOperatorEmitter extends JSSubEmitter implements
             if (id == ASTNodeID.Op_LogicalAndAssignID
                     || id == ASTNodeID.Op_LogicalOrAssignID)
             {
-                IIdentifierNode lnode = (IIdentifierNode) node
-                        .getLeftOperandNode();
+            	try{
+            		 IIdentifierNode lnode = (IIdentifierNode) node
+                             .getLeftOperandNode();
 
-                writeToken(ASEmitterTokens.EQUAL);
-                endMapping(node);
+                     writeToken(ASEmitterTokens.EQUAL);
+                     endMapping(node);
 
-                startMapping(node);
-                write(lnode.getName());
-                endMapping(node);
+                     startMapping(node);
+                     write(lnode.getName());
+                     endMapping(node);
 
-                startMapping(node, node.getLeftOperandNode());
-                write(ASEmitterTokens.SPACE);
-                write((id == ASTNodeID.Op_LogicalAndAssignID) ? ASEmitterTokens.LOGICAL_AND
-                        : ASEmitterTokens.LOGICAL_OR);
+                     startMapping(node, node.getLeftOperandNode());
+                     write(ASEmitterTokens.SPACE);
+                     write((id == ASTNodeID.Op_LogicalAndAssignID) ? ASEmitterTokens.LOGICAL_AND
+                             : ASEmitterTokens.LOGICAL_OR);
+            	}catch(Exception ex){
+            		System.out.println(ex);
+            	}
+               
             }
             else
             {
